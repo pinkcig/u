@@ -9,9 +9,13 @@ declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
 			NODE_ENV: 'development' | 'production';
+			
 			PORT: string;
 			ORIGIN: string;
-			SLUG_LENGTH: number;
+			SLUG_LENGTH: string;
+
+			REDIS_HOST: string;
+			REDIS_PORT: string;
 		}
 	}
 }
@@ -23,4 +27,3 @@ declare module 'express-serve-static-core' {
 }
 
 if (process.env.ORIGIN.endsWith('localhost')) process.env.ORIGIN = `http://localhost:${process.env.PORT}`;
-process.env.SLUG_LENGTH = Number(process.env.SLUG_LENGTH);

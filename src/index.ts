@@ -7,7 +7,7 @@ import { default as cors } from 'cors';
 import { router } from './urls/urls';
 import { json } from 'express';
 
-const { app, logger } = container;
+const { app, logger, redis } = container;
 
 app.use(json())
 	.use(helmet())
@@ -18,3 +18,6 @@ app.get('/', (_, res) => res.status(200).json(createResponse({ status: 'success'
 app.all('*', (_, res) => res.status(404).json(createResponse({ status: 'failure', data: { message: 'Not Found' } })));
 
 app.listen(process.env.PORT, () => logger.info(process.env.ORIGIN));
+
+
+redis.hset('test', 'test', 'test');
