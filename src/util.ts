@@ -52,13 +52,16 @@ export function deserialise<T extends JSONData = JSONData>(data: string | number
 // Wrapper function to cache automatically
 // Can probably be improved with a better solution
 export async function get<T extends JSONData = JSONData>(key: string, fetch: () => Promise<T | null>) {
-	if (!(await redis.exists(key))) {
-		const data = await fetch();
-		if (!data) return null;
+	if (await redis.exists(key)) return deserialise<T>(await redis.get(key));
+	
+	const data = await fetch();
+	if (!data) return null;
 
-		await redis.set(key, serialise(data));
-		return data;
-	}
+	await redis.set(key, serialise(data));
+	return data;
+}
 
-	return deserialise<T>(await redis.get(key));
+export async function cache<T extends JSONData = JSONData>(key: string, data: T) {
+	await redis.set(key, serialise(data));
+	return data;
 }
