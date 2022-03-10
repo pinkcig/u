@@ -19,3 +19,14 @@ export async function hasURL(req: Request, res: Response, next: NextFunction) {
 
 	return next();
 }
+
+export function hasMatchingAPIKey(req: Request, res: Response, next: NextFunction) {
+	const { authorization } = req.headers;
+
+	if (!authorization)
+		return res.status(401).send(createResponse({ status: 'failure', data: { message: 'missing header "Authorization"' } }));
+	if (authorization !== process.env.API_KEY)
+		return res.status(401).send(createResponse({ status: 'failure', data: { message: 'invalid header "Authorization"' } }));
+
+	return next();
+}

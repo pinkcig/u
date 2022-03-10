@@ -5,8 +5,8 @@ function randomCharacter(characterList: string): string {
 // Ran some benchmarks on this function; the imperative counterpart is
 // slightly faster (sometimes slower), but I prefer to trade it for a little bit of readability and consistency.
 // https://tinyurl.com/randomPhoneticKeyBenchmark
-export function randomPhoneticKey(length: number): string {
-	return [...Array(length)].map((_, i) => randomCharacter(i % 2 === 0 ? 'bcdfghjklmnpqrstvwxyz' : 'aeiou')).join('');
+export function randomPhoneticKey(length: number | string): string {
+	return [...Array(Number(length))].map((_, i) => randomCharacter(i % 2 === 0 ? 'bcdfghjklmnpqrstvwxyz' : 'aeiou')).join('');
 }
 
 type JSONData = Record<string, unknown>;
