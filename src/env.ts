@@ -8,11 +8,12 @@ process.env.NODE_ENV ??= 'development';
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
-			NODE_ENV: 'development' | 'production';
-			
+			NODE_ENV: 'development' | 'production' | 'test';
+
 			PORT: string;
 			ORIGIN: string;
 			SLUG_LENGTH: string;
+			API_KEY: string;
 
 			REDIS_HOST: string;
 			REDIS_PORT: string;

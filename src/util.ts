@@ -1,6 +1,7 @@
+import type { PrismaClient } from '@prisma/client';
 import { container } from './container';
 
-const { redis } = container;
+const { redis, prisma } = container;
 
 function randomCharacter(characterList: string): string {
 	return characterList[Math.floor(Math.random() * characterList.length)];
@@ -49,19 +50,28 @@ export function deserialise<T extends JSONData = JSONData>(data: string | number
 	}
 }
 
-// Wrapper function to cache automatically
-// Can probably be improved with a better solution
-export async function get<T extends JSONData = JSONData>(key: string, fetch: () => Promise<T | null>) {
+type NullOrT<T> = Promise<T | null>;
+type PrismaFn<T extends JSONData = JSONData> = (prisma: PrismaClient) => NullOrT<T>;
+
+export async function del<T extends JSONData = JSONData>(key: string, fn: PrismaFn<T>) {
+	await redis.del(key);
+	return fn(prisma);
+}
+
+export async function get<T extends JSONData = JSONData>(key: string, fn: PrismaFn<T>) {
 	if (await redis.exists(key)) return deserialise<T>(await redis.get(key));
-	
-	const data = await fetch();
+
+	const data = await fn(prisma);
 	if (!data) return null;
 
 	await redis.set(key, serialise(data));
 	return data;
 }
 
-export async function cache<T extends JSONData = JSONData>(key: string, data: T) {
+export async function set<T extends JSONData = JSONData>(key: string, fn: PrismaFn<T>) {
+	const data = await fn(prisma);
+	if (!data) return null;
+
 	await redis.set(key, serialise(data));
 	return data;
 }
