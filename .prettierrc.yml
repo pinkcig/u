@@ -1,0 +1,10 @@
+tabWidth: 4 # Width of tab
+useTabs: true # Tabs instead of spaces
+singleQuote: true # Use single quotes instead of double
+printWidth: 140 # Point at which the line will wrap
+semi: true # Semi-colons at the end
+quoteProps: consistent # If a property has quotes, make other properties have them as well
+trailingComma: all # Always add trailing commas
+bracketSpacing: true # Add spacing between brackets
+arrowParens: always # Always add parentheses in arrow functions
+endOfLine: lf # Always use LF as line ending
