@@ -15,3 +15,4 @@ Also Klein's successor.
 # 📚 might do
 
 -   Switch to [tsup](https://tsup.egoist.sh/)
+-   Make database agnostic
