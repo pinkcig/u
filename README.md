@@ -1,6 +1,6 @@
 # 🔖 u
 
-Minimalistic URL shortener as a microservice.
+Minimalistic URL shortener as a microservice.  
 Also Klein's successor.
 
 # 🔨 stack

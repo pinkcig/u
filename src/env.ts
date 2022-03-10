@@ -1,3 +1,4 @@
+import type { Url } from '@prisma/client';
 import { config } from 'dotenv';
 
 config();
@@ -10,7 +11,14 @@ declare global {
 			NODE_ENV: 'development' | 'production';
 			PORT: string;
 			ORIGIN: string;
+			SLUG_LENGTH: number;
 		}
+	}
+}
+
+declare module 'express-serve-static-core' {
+	interface Request {
+		queriedURL: Url;
 	}
 }
 
