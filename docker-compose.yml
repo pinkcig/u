@@ -4,7 +4,7 @@ services:
     u:
         build:
             context: ./
-            target: DEVELOPMENT
+            target: development
         env_file:
             - .env
         links:

@@ -16,20 +16,20 @@ ENV NODE_OPTIONS="--enable-source-maps"
 
 ENTRYPOINT ["dumb-init", "--"]
 
-FROM BASE as DEVELOPMENT
+FROM base as development
 ENV NODE_ENV="development"
 USER node
 
 CMD [ "yarn", "run", "dev"]
 
-FROM BASE as BUILD
+FROM base as build
 RUN yarn install --immutable
 COPY . /opt/app
 
 RUN yarn prisma generate
 RUN yarn run build
 
-FROM BASE as PRODUCTION
+FROM base as production
 ENV NODE_ENV="production"
 
 COPY --from=build /opt/app/build /opt/app/build
