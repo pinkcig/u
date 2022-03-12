@@ -33,7 +33,7 @@ export function createResponse({ data, status }: Required<IResponseFormat>): JSO
 	};
 }
 
-// As Redis doesn't support JSON, we need to serialize and deserialise it.
+// As Redis doesn't support JSON, we need to serialise and deserialise it.
 export function serialise(data: JSONData): string {
 	return JSON.stringify(data);
 }

@@ -14,6 +14,7 @@ services:
             - ./:/opt/app
         ports:
             - 3000:3000
+            - 5555:5555 # Prisma Studio
     postgres:
         image: postgres:latest
         container_name: postgres

@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
 }
 
@@ -12,8 +12,7 @@ datasource db {
 }
 
 model Url {
-  id        Int      @id @default(autoincrement())
-  slug      String   @unique
+  slug      String   @id @unique
   url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
