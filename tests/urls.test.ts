@@ -1,6 +1,31 @@
-import { default as request } from 'supertest';
+import { default as request, type Response } from 'supertest';
 import { app } from '../src';
 import { container } from '../src/container';
+
+function hasBaseWellFormedBody(res: Response) {
+	expect(res.body).toHaveProperty('status');
+	expect(res.body).toHaveProperty('data');
+}
+
+function hasData(res: Response, property: string | string[]) {
+	expect(res.body.data).toHaveProperty(property);
+}
+
+function isSuccess(res: Response) {
+	expect(res.body.status).toBe('success');
+}
+
+function hasBasicURLEndpointData(res: Response) {
+	const fn = hasData.bind(null, res);
+
+	fn('url');
+
+	for (const key of ['createdAt', 'updatedAt', 'url', 'slug']) {
+		fn(['url', key]);
+	}
+
+	return fn;
+}
 
 describe('/', () => {
 	test('should be alive', async () => {
@@ -11,9 +36,10 @@ describe('/', () => {
 		await request(app)
 			.get('/')
 			.expect((res) => {
-				expect(res.body).toHaveProperty('status');
-				expect(res.body).toHaveProperty('data');
-				expect(res.body.data).toHaveProperty('message');
+				isSuccess(res);
+				hasBaseWellFormedBody(res);
+				hasData(res, 'message');
+
 				expect(res.body.data.message).toBe('Alive');
 			});
 	});
@@ -37,11 +63,9 @@ describe('/', () => {
 				await request(app)
 					.get('/urls/test')
 					.expect((res) => {
-						expect(res.body).toHaveProperty('status');
-						expect(res.body).toHaveProperty('data');
-						expect(res.body.data).toHaveProperty('url');
-						expect(res.body.data.url).toHaveProperty('slug');
-						expect(res.body.data.url).toHaveProperty('url');
+						isSuccess(res);
+						hasBaseWellFormedBody(res);
+						hasBasicURLEndpointData(res);
 					});
 			});
 		});
@@ -64,9 +88,10 @@ describe('/', () => {
 					.delete('/urls/test')
 					.set('Authorization', process.env.API_KEY)
 					.expect((res) => {
-						expect(res.body).toHaveProperty('status');
-						expect(res.body).toHaveProperty('data');
-						expect(res.body.data).toHaveProperty('message');
+						isSuccess(res);
+						hasBaseWellFormedBody(res);
+						hasBasicURLEndpointData(res);
+
 						expect(res.body.data.message).toBe('url deleted');
 					});
 			});
@@ -78,26 +103,29 @@ describe('/', () => {
 			});
 
 			test('should return 201 when url is provided', async () => {
-				await request(app)
+				const res = await request(app)
 					.post('/urls')
 					.set('Authorization', process.env.API_KEY)
 					.send({ url: 'https://example.com/' })
 					.expect(201);
+
+				await container.prisma.url.delete({ where: { slug: res.body.data.url.slug } }).catch(() => null);
 			});
 
 			test('should return a well-formed body', async () => {
-				await request(app)
+				const res = await request(app)
 					.post('/urls')
 					.set('Authorization', process.env.API_KEY)
 					.send({ url: 'https://example.com/' })
 					.expect((res) => {
-						expect(res.body).toHaveProperty('status');
-						expect(res.body).toHaveProperty('data');
-						expect(res.body.data).toHaveProperty('url');
-						expect(res.body.data.url).toHaveProperty('slug');
-						expect(res.body.data.url).toHaveProperty('url');
+						isSuccess(res);
+						hasBaseWellFormedBody(res);
+						hasBasicURLEndpointData(res);
+
 						expect(res.body.data.url.url).toBe('https://example.com/');
 					});
+
+				await container.prisma.url.delete({ where: { slug: res.body.data.url.slug } }).catch(() => null);
 			});
 		});
 
