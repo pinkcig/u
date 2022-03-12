@@ -27,4 +27,4 @@ declare module 'express-serve-static-core' {
 	}
 }
 
-if (process.env.ORIGIN.endsWith('localhost')) process.env.ORIGIN = `http://localhost:${process.env.PORT}`;
+if (process.env.ORIGIN === '0.0.0.0') process.env.ORIGIN = `http://0.0.0.0:${process.env.PORT}`;
