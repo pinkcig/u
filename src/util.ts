@@ -16,10 +16,10 @@ export function randomPhoneticKey(length: number | string): string {
 }
 
 type JSONData = Record<string, unknown>;
-type Statuses = 'success' | 'failure' | 'error';
+type Status = 'success' | 'failure' | 'error';
 
 interface IResponseFormat {
-	status: Statuses;
+	status: Status;
 	data: JSONData;
 }
 
