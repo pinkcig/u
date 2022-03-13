@@ -12,6 +12,7 @@ Also Klein's successor.
 -   PostgreSQL
 -   Redis
 -   Docker
+    - Docker Compose
 
 # 🐋 docker
 
@@ -26,3 +27,6 @@ Run `docker build -t u .` to start the production environment.
 
 -   Switch to [tsup](https://tsup.egoist.sh/)
 -   Make database agnostic(?)
+
+# 🍵 credits
+Myself; [@pinkcig](https://twitter.com/pinkcig_)
